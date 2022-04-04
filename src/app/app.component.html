@@ -1,0 +1,48 @@
+<!-- <div> -->
+  <mat-stepper orientation="vertical" [linear]="true" #stepper>
+    <mat-step [stepControl]="attackingCountryGroup" label="Attacking Country">
+      <form [formGroup]="attackingCountryGroup">
+        <mat-form-field appearance="fill">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="attackingName" required>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Armies</mat-label>
+          <input type="number" matInput formControlName="attackingArmies" required>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Number of Dice</mat-label>
+          <mat-select formControlName="attackingDice">
+            <mat-option *ngFor="let dice of attackingDice$ | async" [value]="dice">{{dice}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <div>
+          <button mat-raised-button color="primary" matStepperNext [disabled]="!attackingCountryGroup.valid">Next</button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="defendingCountryGroup" label="Defending Country">
+      <form [formGroup]="defendingCountryGroup">
+        <mat-form-field appearance="fill">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="defendingName" required>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Armies</mat-label>
+          <input type="number" matInput formControlName="defendingArmies" required>
+        </mat-form-field>
+        <div>
+          <button mat-raised-button color="primary" matStepperNext [disabled]="!defendingCountryGroup.valid">Next</button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Done</ng-template>
+      <p>You are now done.</p>
+      <div>
+        <button mat-raised-button matStepperPrevious>Back</button>
+        <button mat-raised-button (click)="stepper.reset()">Reset</button>
+      </div>
+    </mat-step>
+  </mat-stepper>
+<!-- </div> -->
