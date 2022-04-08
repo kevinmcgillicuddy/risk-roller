@@ -19,6 +19,7 @@ export class AppComponent implements OnInit {
 
   public panelOpenState = false;
 
+  public result$: Observable<string[]>;
   public attackingDice$: Observable<number[]> | undefined;
   constructor(private _formBuilder: FormBuilder, private diceService: DiceService, breakpointObserver: BreakpointObserver) {
     this.stepperOrientation = breakpointObserver
@@ -27,8 +28,8 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.diceService.attack({
-      attackingArmies: 15,
+    this.result$ = this.diceService.attack({
+      attackingArmies: 100,
       defendingArmies: 120,
       attackingDice: 3
     })

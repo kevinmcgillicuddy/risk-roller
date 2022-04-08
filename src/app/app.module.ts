@@ -5,6 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -21,6 +22,7 @@ import { AppComponent } from './app.component';
     MatStepperModule,
     MatExpansionModule,
     ReactiveFormsModule,
+    MatListModule,
     MatCardModule,
     MatInputModule,
     MatSelectModule,

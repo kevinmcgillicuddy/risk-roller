@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -48,14 +49,15 @@ export class DiceService {
     attackingArmies: number,
     defendingArmies: number,
     attackingDice: number,
-  }) {
+  }): Observable<string[]> {
+    let result: string[] = [];
     while (params.defendingArmies > 0 && params.attackingArmies > 1) {
-      console.log('************')
-      console.log(this.maxDice(params.attackingArmies, params.attackingDice))
-      console.log('************')
+      // console.log('************')
+      // console.log(this.maxDice(params.attackingArmies, params.attackingDice))
+      // console.log('************')
+      //this.maxDice(params.attackingArmies, params.attackingDice)
 
-
-      let attackDice = this.rollDiceResult(this.maxDice(params.attackingArmies, params.attackingDice)); //attacking dice
+      let attackDice = this.rollDiceResult(params.attackingDice); //attacking dice
       let defenseDice = this.rollDiceResult(params.defendingArmies >= 2 ? 2 : 1); //defending dice
       console.log(attackDice, defenseDice);
       //compare the first element of the attacking array with the first element of the defending array
@@ -67,13 +69,18 @@ export class DiceService {
         if (attackDice[i] <= defenseDice[i]) {
           console.log('🛡️ Attack lost! ' + ' Attack rolled ' + attackDice[i] + ' Defense rolled ' + defenseDice[i]);
           params.attackingArmies--;
+          result.push('🛡️ Attack lost! ' + ' Attack rolled ' + attackDice[i] + ' Defense rolled ' + defenseDice[i] + ' Attacking armies left: ' + params.attackingArmies);
+          result.push('Attacking Armies left: ' + params.attackingArmies);
         } else {
-          console.log('🗡️ Defense lost ' + ' Attack rolled ' + attackDice[i] + ' Defense rolled ' + defenseDice[i]);
+          console.log('🗡️ Defense lost! ' + ' Attack rolled ' + attackDice[i] + ' Defense rolled ' + defenseDice[i]);
           params.defendingArmies--;
+          result.push('🗡️ Defense lost! ' + ' Attack rolled ' + attackDice[i] + ' Defense rolled ' + defenseDice[i]);
+          result.push('Defending Armies left: ' + params.defendingArmies);
         }
       }
       console.log(params.attackingArmies, params.defendingArmies);
     }
+    return of(result)
   }
 
 

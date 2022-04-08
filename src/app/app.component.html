@@ -64,7 +64,9 @@
             xxxxxx Won!
           </mat-panel-description>
         </mat-expansion-panel-header>
-        <p>This is the primary content of the panel.</p>
+        <mat-list role="list" *ngFor="let result of result$ | async ">
+          <mat-list-item role="listitem">{{result}}</mat-list-item>
+        </mat-list>
       </mat-expansion-panel>
     </mat-accordion>
   </div>
