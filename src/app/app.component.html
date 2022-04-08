@@ -1,38 +1,46 @@
-<!-- <div> -->
-  <mat-stepper orientation="vertical" [linear]="true" #stepper>
-    <mat-step [stepControl]="attackingCountryGroup" label="Attacking Country">
-      <form [formGroup]="attackingCountryGroup">
-        <mat-form-field appearance="fill">
-          <mat-label>Name</mat-label>
-          <input matInput formControlName="attackingName" required>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Armies</mat-label>
-          <input type="number" matInput formControlName="attackingArmies" required>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Number of Dice</mat-label>
-          <mat-select formControlName="attackingDice">
-            <mat-option *ngFor="let dice of attackingDice$ | async" [value]="dice">{{dice}}</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <div>
-          <button mat-raised-button color="primary" matStepperNext [disabled]="!attackingCountryGroup.valid">Next</button>
-        </div>
-      </form>
-    </mat-step>
+<mat-card class="container">
+  <mat-stepper [orientation]="(stepperOrientation | async)!" [linear]="true" #stepper>
+    <div>
+      <mat-step [stepControl]="attackingCountryGroup" label="Attacking Country">
+        <form [formGroup]="attackingCountryGroup">
+          <mat-form-field appearance="fill">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="attackingName" required />
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Armies</mat-label>
+            <input type="number" matInput formControlName="attackingArmies" required />
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Number of Dice</mat-label>
+            <mat-select formControlName="attackingDice"
+              [disabled]="!attackingCountryGroup.get('attackingArmies')?.valid" mat-raised-button
+              matTooltip="Enter number of armies to determine dice">
+              <mat-option *ngFor="let dice of attackingDice$ | async" [value]="dice">{{ dice }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <div>
+            <button mat-raised-button color="primary" matStepperNext [disabled]="!attackingCountryGroup.valid">
+              Next
+            </button>
+          </div>
+        </form>
+      </mat-step>
+    </div>
     <mat-step [stepControl]="defendingCountryGroup" label="Defending Country">
       <form [formGroup]="defendingCountryGroup">
         <mat-form-field appearance="fill">
           <mat-label>Name</mat-label>
-          <input matInput formControlName="defendingName" required>
+          <input matInput formControlName="defendingName" required />
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>Armies</mat-label>
-          <input type="number" matInput formControlName="defendingArmies" required>
+          <input type="number" matInput formControlName="defendingArmies" required />
         </mat-form-field>
         <div>
-          <button mat-raised-button color="primary" matStepperNext [disabled]="!defendingCountryGroup.valid">Next</button>
+          <button mat-raised-button color="primary" matStepperNext [disabled]="!defendingCountryGroup.valid">
+            Next
+          </button>
         </div>
       </form>
     </mat-step>
@@ -40,10 +48,24 @@
       <ng-template matStepLabel>Done</ng-template>
       <p>You are now done.</p>
       <div>
-
         <button mat-raised-button color="warn" matStepperPrevious>Attack!</button>
         <button mat-raised-button (click)="stepper.reset()">Reset</button>
       </div>
     </mat-step>
   </mat-stepper>
-<!-- </div> -->
+  <div class="accordion">
+    <mat-accordion>
+      <mat-expansion-panel hideToggle>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Results
+          </mat-panel-title>
+          <mat-panel-description>
+            xxxxxx Won!
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <p>This is the primary content of the panel.</p>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+</mat-card>

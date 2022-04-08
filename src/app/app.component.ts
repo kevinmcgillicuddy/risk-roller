@@ -1,7 +1,11 @@
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { mergeMap, Observable, of } from 'rxjs';
+import { StepperOrientation } from '@angular/material/stepper';
+import { map, mergeMap, Observable, of } from 'rxjs';
 import { DiceService } from './services/dice.service';
+
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -10,9 +14,17 @@ import { DiceService } from './services/dice.service';
 export class AppComponent implements OnInit {
   public attackingCountryGroup: FormGroup;
   public defendingCountryGroup: FormGroup;
-  public attackingArmies: FormControl
+  public attackingArmies: FormControl;
+  public stepperOrientation: Observable<StepperOrientation>;
+
+  public panelOpenState = false;
+
   public attackingDice$: Observable<number[]> | undefined;
-  constructor(private _formBuilder: FormBuilder, private diceService: DiceService) { }
+  constructor(private _formBuilder: FormBuilder, private diceService: DiceService, breakpointObserver: BreakpointObserver) {
+    this.stepperOrientation = breakpointObserver
+      .observe('(min-width: 800px)')
+      .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
+  }
 
   ngOnInit() {
     this.diceService.attack({
