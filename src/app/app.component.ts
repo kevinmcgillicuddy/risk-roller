@@ -46,15 +46,13 @@ export class AppComponent implements OnInit {
     });
 
     this.attackingDice$ = this.attackingCountryGroup.get('attackingArmies')?.valueChanges.pipe(
-      mergeMap(number => number <= 2 ? of([1]) : of([1, 2]))
+      mergeMap(number => number <= 2 ? of([1])
+        : number <= 3 ? of([1, 2])
+          : of([1, 2, 3]))
     )
   }
-
-  submitAttacking() {
+  submit() {
     console.log(this.attackingCountryGroup.value);
   }
 
-  submitDefending() {
-
-  }
 }

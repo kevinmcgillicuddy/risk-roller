@@ -54,9 +54,9 @@
     </mat-step>
     <mat-step>
       <ng-template matStepLabel>Done</ng-template>
-      <p>You are now done.</p>
+      <p>The name of the game is Risk.</p>
       <div>
-        <button mat-raised-button color="warn" (click)="submitAttacking()">Attack!</button>
+        <button mat-raised-button color="warn" (click)="submit()">Attack!</button>
         <button mat-raised-button (click)="stepper.reset()" matStepperPrevious>Reset</button>
       </div>
     </mat-step>
