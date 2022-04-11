@@ -7,6 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSliderModule } from '@angular/material/slider';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserModule } from '@angular/platform-browser';
@@ -24,6 +25,7 @@ import { AppComponent } from './app.component';
     ReactiveFormsModule,
     MatListModule,
     MatCardModule,
+    MatSliderModule,
     MatInputModule,
     MatSelectModule,
     MatTooltipModule,

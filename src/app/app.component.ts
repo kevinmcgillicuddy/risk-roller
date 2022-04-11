@@ -31,12 +31,14 @@ export class AppComponent implements OnInit {
     this.diceService.attack({
       attackingArmies: 15,
       defendingArmies: 25,
-      attackingDice: 2
+      attackingDice: 2,
+      attackStop: 10
     })
     this.attackingCountryGroup = this._formBuilder.group({
       attackingName: ['', Validators.required],
       attackingArmies: ['', [Validators.required, Validators.min(2)]],
-      attackingDice: ['', Validators.required]
+      attackingDice: ['', Validators.required],
+      attackingStop: ['', Validators.required],
     });
     this.defendingCountryGroup = this._formBuilder.group({
       defendingName: ['', Validators.required],

@@ -48,11 +48,11 @@ export class DiceService {
     attackingArmies: number,
     defendingArmies: number,
     attackingDice: number,
+    attackStop: number,
   }): Observable<any[]> {
 
-    let result: any[] = [];
-
-    while (params.defendingArmies > 0 && params.attackingArmies > 1) {
+    let result: any[] = []
+    while (params.defendingArmies > 0 && params.attackingArmies >= params.attackStop) {
 
       console.log(' 🎖️ ' + this.maxAttackDice(params.attackingArmies, params.attackingDice));
 
@@ -80,7 +80,7 @@ export class DiceService {
           result.push('Defending Armies left: ' + params.defendingArmies);
         }
       }
-      console.log(params.attackingArmies, params.defendingArmies);
+      console.log('Attacking Armies left: ' + params.attackingArmies + ' Defending Armies left: ' + params.defendingArmies);
     }
     return of(result)
   }

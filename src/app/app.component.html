@@ -19,6 +19,14 @@
               <mat-option *ngFor="let dice of attackingDice$ | async" [value]="dice">{{ dice }}</mat-option>
             </mat-select>
           </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Stop on loss of</mat-label>
+            <mat-slider formControlName="attackingStop" thumbLabel tickInterval="1" step="1" min="0" invert="true"
+              [disabled]="!attackingCountryGroup.get('attackingArmies')?.valid"
+              matTooltip="Stops attack when this number of armies are lost"
+              [max]="attackingCountryGroup.get('attackingArmies')?.value - 1" aria-label="units"></mat-slider>
+            <textarea matInput hidden></textarea>
+          </mat-form-field>
           <div>
             <button mat-raised-button color="primary" matStepperNext [disabled]="!attackingCountryGroup.valid">
               Next
@@ -48,8 +56,8 @@
       <ng-template matStepLabel>Done</ng-template>
       <p>You are now done.</p>
       <div>
-        <button mat-raised-button color="warn" matStepperPrevious>Attack!</button>
-        <button mat-raised-button (click)="stepper.reset()">Reset</button>
+        <button mat-raised-button color="warn" (click)="submitAttacking()">Attack!</button>
+        <button mat-raised-button (click)="stepper.reset()" matStepperPrevious>Reset</button>
       </div>
     </mat-step>
   </mat-stepper>
