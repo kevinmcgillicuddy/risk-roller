@@ -9,9 +9,9 @@ export class DiceService {
   constructor() { }
 
   /**
+   * @param times the number of dice to roll to return as part of the array aka the users roll of dice
    * @returns an array of numbers between 1 and 6, sorted high to low
    */
-
   rollDiceResult(times: number): number[] {
     let result = [];
     for (let i = 0; i < times; i++) {
@@ -21,45 +21,44 @@ export class DiceService {
   }
 
   /**
+   * In risk you when you attack you must always leave behind 1 army. For this reason your attack dice cannot match the number of armies you have, 
+   * since you must always move at least those number of armies to the conquered territory if you win.
+   * @param armies the number of armies attacking
+   * @param preferedDice the number of dice the user perferrs to roll
    * @returns the number of dice an attacker is allowed to roll based on number of armies
    */
-  maxDice(armies: number, pref: number): number {
-    //2 < 10
-    //1 < 10
-    //1 < 2
-    //2 < 3
-    if (pref < armies) {
-      return pref;
-    } else {
-      //pref -- army
-      //3 -- 2
-
-      return pref--;
+  maxAttackDice(armies: number, preferedDice: number): number {
+    //if the attacker has more armies than the prefered dice, return the prefered dice
+    if (armies > preferedDice) {
+      return preferedDice;
     }
-    // if (armies >= 4) {
-    //   return pref; //dont subtract any dice
-    // } else if (armies === 3 && (pref >= armies)) {
-    //   return 2; //subtract 1 dice
-    // } else (armies === 2) {
-    //   return 1; //subtract 2 dice armies must be 2
-    // }
+    //if the attacker has 1 or less armies return 0 dice
+    if (armies <= 1) {
+      return 0;
+    }
+    //while attacker armies is less then prefered dice, take 1 from the perfered dice
+    do {
+      preferedDice--;
+    } while (armies <= preferedDice)
+
+    return preferedDice;
   }
 
   attack(params: {
     attackingArmies: number,
     defendingArmies: number,
     attackingDice: number,
-  }): Observable<string[]> {
-    let result: string[] = [];
-    while (params.defendingArmies > 0 && params.attackingArmies > 1) {
-      // console.log('************')
-      // console.log(this.maxDice(params.attackingArmies, params.attackingDice))
-      // console.log('************')
-      //this.maxDice(params.attackingArmies, params.attackingDice)
+  }): Observable<any[]> {
+    let result: any[] = [];
 
-      let attackDice = this.rollDiceResult(params.attackingDice); //attacking dice
+    while (params.defendingArmies > 0 && params.attackingArmies > 1) {
+      console.log(' 🎖️ ' + this.maxAttackDice(params.attackingArmies, params.attackingDice));
+      let attackDice = this.rollDiceResult(this.maxAttackDice(params.attackingArmies, params.attackingDice)); //attacking dice
+      if (attackDice.length === 0) {
+        return of();
+      }
       let defenseDice = this.rollDiceResult(params.defendingArmies >= 2 ? 2 : 1); //defending dice
-      console.log(attackDice, defenseDice);
+      // console.log('attack used ' + attackDice.length + ' and had ' + params.attackingArmies + ' armies');
       //compare the first element of the attacking array with the first element of the defending array
       for (let i = 0; i < defenseDice.length; i++) {
         //if mismatch between the attacking array and the the defending array, skip
@@ -83,5 +82,14 @@ export class DiceService {
     return of(result)
   }
 
+}
+interface IResult {
+  winner?: 'attacker' | 'defender';
+  roll: {
+    attackingArmiesLeft?: number;
+    defendingArmiesLeft?: number;
+    attackingDice?: number[];
+    defendingDice?: number[];
+  }[]
 
 }

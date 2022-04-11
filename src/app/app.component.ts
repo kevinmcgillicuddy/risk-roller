@@ -28,10 +28,10 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.result$ = this.diceService.attack({
-      attackingArmies: 100,
-      defendingArmies: 120,
-      attackingDice: 3
+    this.diceService.attack({
+      attackingArmies: 15,
+      defendingArmies: 25,
+      attackingDice: 2
     })
     this.attackingCountryGroup = this._formBuilder.group({
       attackingName: ['', Validators.required],
