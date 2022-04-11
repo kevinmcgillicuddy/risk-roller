@@ -49,16 +49,19 @@ export class DiceService {
     defendingArmies: number,
     attackingDice: number,
   }): Observable<any[]> {
+
     let result: any[] = [];
 
     while (params.defendingArmies > 0 && params.attackingArmies > 1) {
+
       console.log(' 🎖️ ' + this.maxAttackDice(params.attackingArmies, params.attackingDice));
+
       let attackDice = this.rollDiceResult(this.maxAttackDice(params.attackingArmies, params.attackingDice)); //attacking dice
-      if (attackDice.length === 0) {
-        return of();
-      }
       let defenseDice = this.rollDiceResult(params.defendingArmies >= 2 ? 2 : 1); //defending dice
-      // console.log('attack used ' + attackDice.length + ' and had ' + params.attackingArmies + ' armies');
+
+      console.log('attack used ' + attackDice.length + ' dice and had ' + params.attackingArmies + ' armies');
+      console.log('defenese used ' + defenseDice.length + ' dice and had ' + params.defendingArmies + ' armies');
+
       //compare the first element of the attacking array with the first element of the defending array
       for (let i = 0; i < defenseDice.length; i++) {
         //if mismatch between the attacking array and the the defending array, skip
