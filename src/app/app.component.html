@@ -5,10 +5,6 @@
         <mat-step [stepControl]="attackingCountryGroup" label="Attacking Country">
           <form [formGroup]="attackingCountryGroup">
             <mat-form-field appearance="fill">
-              <mat-label>Name</mat-label>
-              <input matInput formControlName="attackingName" required />
-            </mat-form-field>
-            <mat-form-field appearance="fill">
               <mat-label>Armies</mat-label>
               <input type="number" matInput formControlName="attackingArmies" required />
             </mat-form-field>
@@ -37,10 +33,6 @@
       </div>
       <mat-step [stepControl]="defendingCountryGroup" label="Defending Country">
         <form [formGroup]="defendingCountryGroup">
-          <mat-form-field appearance="fill">
-            <mat-label>Name</mat-label>
-            <input matInput formControlName="defendingName" required />
-          </mat-form-field>
           <mat-form-field appearance="fill">
             <mat-label>Armies</mat-label>
             <input type="number" matInput formControlName="defendingArmies" required />

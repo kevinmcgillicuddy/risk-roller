@@ -35,13 +35,11 @@ export class AppComponent implements OnInit {
       attackStop: 10
     })
     this.attackingCountryGroup = this._formBuilder.group({
-      attackingName: ['', Validators.required],
       attackingArmies: ['', [Validators.required, Validators.min(2)]],
       attackingDice: ['', Validators.required],
       attackingStop: ['', Validators.required],
     });
     this.defendingCountryGroup = this._formBuilder.group({
-      defendingName: ['', Validators.required],
       defendingArmies: ['', [Validators.required, Validators.min(1)]],
     });
 
