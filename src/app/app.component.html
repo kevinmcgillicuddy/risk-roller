@@ -1,81 +1,82 @@
-<mat-card class="container">
-  <mat-stepper [orientation]="(stepperOrientation | async)!" [linear]="true" #stepper>
-    <div>
-      <mat-step [stepControl]="attackingCountryGroup" label="Attacking Country">
-        <form [formGroup]="attackingCountryGroup">
+<div class="container">
+  <mat-card>
+    <mat-stepper [orientation]="(stepperOrientation | async)!" [linear]="true" #stepper>
+      <div>
+        <mat-step [stepControl]="attackingCountryGroup" label="Attacking Country">
+          <form [formGroup]="attackingCountryGroup">
+            <mat-form-field appearance="fill">
+              <mat-label>Name</mat-label>
+              <input matInput formControlName="attackingName" required />
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-label>Armies</mat-label>
+              <input type="number" matInput formControlName="attackingArmies" required />
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-label>Number of Dice</mat-label>
+              <mat-select formControlName="attackingDice"
+                [disabled]="!attackingCountryGroup.get('attackingArmies')?.valid" mat-raised-button
+                matTooltip="Enter number of armies to determine dice">
+                <mat-option *ngFor="let dice of attackingDice$ | async" [value]="dice">{{ dice }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-label>Stop on loss of</mat-label>
+              <mat-slider formControlName="attackingStop" thumbLabel tickInterval="1" step="1" min="0" invert="true"
+                [disabled]="!attackingCountryGroup.get('attackingArmies')?.valid"
+                [max]="attackingCountryGroup.get('attackingArmies')?.value - 1" aria-label="units"></mat-slider>
+              <textarea matInput hidden></textarea>
+            </mat-form-field>
+            <div>
+              <button mat-raised-button color="primary" matStepperNext [disabled]="!attackingCountryGroup.valid">
+                Next
+              </button>
+            </div>
+          </form>
+        </mat-step>
+      </div>
+      <mat-step [stepControl]="defendingCountryGroup" label="Defending Country">
+        <form [formGroup]="defendingCountryGroup">
           <mat-form-field appearance="fill">
             <mat-label>Name</mat-label>
-            <input matInput formControlName="attackingName" required />
+            <input matInput formControlName="defendingName" required />
           </mat-form-field>
           <mat-form-field appearance="fill">
             <mat-label>Armies</mat-label>
-            <input type="number" matInput formControlName="attackingArmies" required />
-          </mat-form-field>
-          <mat-form-field appearance="fill">
-            <mat-label>Number of Dice</mat-label>
-            <mat-select formControlName="attackingDice"
-              [disabled]="!attackingCountryGroup.get('attackingArmies')?.valid" mat-raised-button
-              matTooltip="Enter number of armies to determine dice">
-              <mat-option *ngFor="let dice of attackingDice$ | async" [value]="dice">{{ dice }}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field appearance="fill">
-            <mat-label>Stop on loss of</mat-label>
-            <mat-slider formControlName="attackingStop" thumbLabel tickInterval="1" step="1" min="0" invert="true"
-              [disabled]="!attackingCountryGroup.get('attackingArmies')?.valid"
-              matTooltip="Stops attack when this number of armies are lost"
-              [max]="attackingCountryGroup.get('attackingArmies')?.value - 1" aria-label="units"></mat-slider>
-            <textarea matInput hidden></textarea>
+            <input type="number" matInput formControlName="defendingArmies" required />
           </mat-form-field>
           <div>
-            <button mat-raised-button color="primary" matStepperNext [disabled]="!attackingCountryGroup.valid">
+            <button mat-raised-button color="primary" matStepperNext [disabled]="!defendingCountryGroup.valid">
               Next
             </button>
           </div>
         </form>
       </mat-step>
-    </div>
-    <mat-step [stepControl]="defendingCountryGroup" label="Defending Country">
-      <form [formGroup]="defendingCountryGroup">
-        <mat-form-field appearance="fill">
-          <mat-label>Name</mat-label>
-          <input matInput formControlName="defendingName" required />
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Armies</mat-label>
-          <input type="number" matInput formControlName="defendingArmies" required />
-        </mat-form-field>
+      <mat-step>
+        <ng-template matStepLabel>Done</ng-template>
+        <p>The name of the game is Risk.</p>
         <div>
-          <button mat-raised-button color="primary" matStepperNext [disabled]="!defendingCountryGroup.valid">
-            Next
-          </button>
+          <button mat-raised-button color="warn" (click)="submit()">Attack!</button>
+          <button mat-raised-button (click)="stepper.reset()" matStepperPrevious>Reset</button>
         </div>
-      </form>
-    </mat-step>
-    <mat-step>
-      <ng-template matStepLabel>Done</ng-template>
-      <p>The name of the game is Risk.</p>
-      <div>
-        <button mat-raised-button color="warn" (click)="submit()">Attack!</button>
-        <button mat-raised-button (click)="stepper.reset()" matStepperPrevious>Reset</button>
-      </div>
-    </mat-step>
-  </mat-stepper>
-  <div class="accordion">
-    <mat-accordion>
-      <mat-expansion-panel hideToggle>
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            Results
-          </mat-panel-title>
-          <mat-panel-description>
-            xxxxxx Won!
-          </mat-panel-description>
-        </mat-expansion-panel-header>
-        <mat-list role="list" *ngFor="let result of result$ | async ">
-          <mat-list-item role="listitem">{{result}}</mat-list-item>
-        </mat-list>
-      </mat-expansion-panel>
-    </mat-accordion>
-  </div>
-</mat-card>
+      </mat-step>
+    </mat-stepper>
+    <div class="accordion">
+      <mat-accordion>
+        <mat-expansion-panel hideToggle>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Results
+            </mat-panel-title>
+            <mat-panel-description>
+              xxxxxx Won!
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <mat-list role="list" *ngFor="let result of result$ | async ">
+            <mat-list-item role="listitem">{{result}}</mat-list-item>
+          </mat-list>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </mat-card>
+</div>
