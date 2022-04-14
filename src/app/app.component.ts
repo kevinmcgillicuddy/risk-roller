@@ -1,9 +1,9 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { StepperOrientation } from '@angular/material/stepper';
 import { map, mergeMap, Observable, of } from 'rxjs';
-import { DiceService } from './services/dice.service';
+import { DiceService, IResult } from './services/dice.service';
 
 
 @Component({
@@ -16,10 +16,8 @@ export class AppComponent implements OnInit {
   public defendingCountryGroup: FormGroup;
   public attackingArmies: FormControl;
   public stepperOrientation: Observable<StepperOrientation>;
-
   public panelOpenState = false;
-
-  public result$: Observable<string[]>;
+  public result$: Observable<IResult>;
   public attackingDice$: Observable<number[]> | undefined;
   constructor(private _formBuilder: FormBuilder, private diceService: DiceService, breakpointObserver: BreakpointObserver) {
     this.stepperOrientation = breakpointObserver
@@ -27,13 +25,14 @@ export class AppComponent implements OnInit {
       .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
   }
 
+  matchPassword(control: AbstractControl): ValidationErrors | null {
+    const attackingArmies = control.get("attackingArmies")?.value;
+    const attackingStop = control.get("attackingStop")?.value;
+    if (attackingStop > attackingArmies) { return { 'noMatch': true } }
+    return null
+  }
   ngOnInit() {
-    this.diceService.attack({
-      attackingArmies: 15,
-      defendingArmies: 25,
-      attackingDice: 2,
-      attackStop: 10
-    })
+
     this.attackingCountryGroup = this._formBuilder.group({
       attackingArmies: ['', [Validators.required, Validators.min(2)]],
       attackingDice: ['', Validators.required],
@@ -50,7 +49,12 @@ export class AppComponent implements OnInit {
     )
   }
   submit() {
-    console.log(this.attackingCountryGroup.value);
+    this.result$ = this.diceService.attack({
+      attackingArmies: this.attackingCountryGroup.get('attackingArmies')!.value,
+      defendingArmies: this.defendingCountryGroup.get('defendingArmies')!.value,
+      attackingDice: this.attackingCountryGroup.get('attackingDice')!.value,
+      attackStop: this.attackingCountryGroup.get('attackingStop')!.value
+    })
   }
 
 }

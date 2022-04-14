@@ -49,50 +49,61 @@ export class DiceService {
     defendingArmies: number,
     attackingDice: number,
     attackStop: number,
-  }): Observable<any[]> {
+  }): Observable<IResult> {
 
-    let result: any[] = []
+    let result: IResult = {
+      roll: [{
+        attackingArmiesLeft: params.attackingArmies,
+        defendingArmiesLeft: params.defendingArmies,
+        attackingDice: [],
+        defendingDice: [],
+        resultString: []
+      }]
+    }
+
     while (params.defendingArmies > 0 && params.attackingArmies >= params.attackStop) {
-
-      console.log(' 🎖️ ' + this.maxAttackDice(params.attackingArmies, params.attackingDice));
-
-      let attackDice = this.rollDiceResult(this.maxAttackDice(params.attackingArmies, params.attackingDice)); //attacking dice
-      let defenseDice = this.rollDiceResult(params.defendingArmies >= 2 ? 2 : 1); //defending dice
-
-      console.log('attack used ' + attackDice.length + ' dice and had ' + params.attackingArmies + ' armies');
-      console.log('defenese used ' + defenseDice.length + ' dice and had ' + params.defendingArmies + ' armies');
-
+      //array of attacking dice
+      let attackDice = this.rollDiceResult(this.maxAttackDice(params.attackingArmies, params.attackingDice));
+      //array of defending dice
+      let defenseDice = this.rollDiceResult(params.defendingArmies >= 2 ? 2 : 1);
       //compare the first element of the attacking array with the first element of the defending array
       for (let i = 0; i < defenseDice.length; i++) {
-        //if mismatch between the attacking array and the the defending array, skip
+        //if mismatch between the attacking array and the the defending array, skip - ie there are more attacking dice than defending dice
+        //because it sorts the lowest attacker dice is discarded in this case
         if (!attackDice[i] || !defenseDice[i]) {
           continue;
         }
+        //if the attacking dice is less than or equal to the defending dice, the attacker looses an army
         if (attackDice[i] <= defenseDice[i]) {
-          console.log('🛡️ Attack lost! ' + ' Attack rolled ' + attackDice[i] + ' Defense rolled ' + defenseDice[i]);
           params.attackingArmies--;
-          result.push('🛡️ Attack lost! ' + ' Attack rolled ' + attackDice[i] + ' Defense rolled ' + defenseDice[i] + ' Attacking armies left: ' + params.attackingArmies);
-          result.push('Attacking Armies left: ' + params.attackingArmies);
         } else {
-          console.log('🗡️ Defense lost! ' + ' Attack rolled ' + attackDice[i] + ' Defense rolled ' + defenseDice[i]);
           params.defendingArmies--;
-          result.push('🗡️ Defense lost! ' + ' Attack rolled ' + attackDice[i] + ' Defense rolled ' + defenseDice[i]);
-          result.push('Defending Armies left: ' + params.defendingArmies);
         }
       }
-      console.log('Attacking Armies left: ' + params.attackingArmies + ' Defending Armies left: ' + params.defendingArmies);
+
+      result.roll?.push({
+        attackingArmiesLeft: params.attackingArmies,
+        defendingArmiesLeft: params.defendingArmies,
+        attackingDice: attackDice,
+        defendingDice: defenseDice,
+      });
     }
-    return of(result)
+
+    return of({
+      roll: result.roll,
+      winner: params.defendingArmies > 0 ? '🛡️ Defender' : '⚔️ Attacker',
+    } as IResult)
   }
 
 }
-interface IResult {
-  winner?: 'attacker' | 'defender';
+export interface IResult {
+  winner?: '⚔️ Attacker' | '🛡️ Defender';
   roll: {
-    attackingArmiesLeft?: number;
-    defendingArmiesLeft?: number;
-    attackingDice?: number[];
-    defendingDice?: number[];
+    attackingArmiesLeft: number;
+    defendingArmiesLeft: number;
+    attackingDice: number[];
+    defendingDice: number[];
+    resultString?: string[];
   }[]
 
 }
