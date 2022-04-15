@@ -1,5 +1,6 @@
+import * as cdk from 'aws-cdk-lib';
 import {
-  App, aws_certificatemanager as acm,
+  aws_certificatemanager as acm,
   aws_cloudfront as cloudfront,
   aws_cloudfront_origins as cloudfrontOrigins,
   aws_s3 as s3,
@@ -8,7 +9,6 @@ import {
   RemovalPolicy,
   StackProps
 } from 'aws-cdk-lib';
-import { Construct } from 'constructs';
 
 export interface FrontendConstructProps extends StackProps {
   /**
@@ -35,11 +35,11 @@ export interface FrontendConstructProps extends StackProps {
 }
 
 // some code taken from https://github.com/aws-samples/aws-cdk-examples/blob/master/typescript/static-site/static-site.ts
-export class RiskRollerStack extends Construct {
+export class RiskRollerStack extends cdk.Stack {
   private readonly certificate: acm.Certificate;
   public readonly distribution: cloudfront.Distribution;
 
-  constructor(parent: App, id: string, props: FrontendConstructProps) {
+  constructor(parent: cdk.App, id: string, props: FrontendConstructProps) {
     super(parent, id);
 
     // Content bucket
