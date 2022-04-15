@@ -41,6 +41,6 @@ jobs:
         uses: youyo/aws-cdk-github-actions@v2
         with:
           cdk_subcommand: "deploy"
-          cdk_stack: "Frontend-riskRoller"
+          cdk_stack: "frontend-riskRoller"
           working_dir: "./cdk"
           cdk_args: "--require-approval never"
