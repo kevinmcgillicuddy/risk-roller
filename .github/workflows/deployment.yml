@@ -5,7 +5,8 @@ on:
     branches:
       - main
   workflow_dispatch:
-
+env:
+  AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT }}
 jobs:
   build:
     name: Build Angular project
@@ -36,11 +37,10 @@ jobs:
             ${{ inputs.ng_directory }}/dist
             ${{ inputs.ng_directory }}/src/configs
           retention-days: 1
-
-      - name: CDK deploy
-        uses: scottbrenner/aws-cdk-action@master
+      - name: CDK Deploy
+        uses: youyo/aws-cdk-github-actions@v2
         with:
-          args: deploy
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          cdk_subcommand: "deploy"
+          cdk_stack: "Frontend-riskRoller"
+          working_dir: "./cdk"
+          cdk_args: "--require-approval never"
