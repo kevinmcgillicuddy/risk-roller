@@ -11,7 +11,7 @@ jobs:
     name: Build Angular project
     environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
-      
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -19,12 +19,12 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16.x'
-          registry-url: 'https://npm.pkg.github.com'
-          cache: 'npm'
-    
+          node-version: "16.x"
+          registry-url: "https://npm.pkg.github.com"
+          cache: "npm"
+
       - name: Compile client code
-          run:
+        run: |
           npm ci
           npm run build -- --configuration=prod
           rm -f dist/*.map
