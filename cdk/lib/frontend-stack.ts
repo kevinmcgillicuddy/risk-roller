@@ -36,19 +36,11 @@ export interface FrontendConstructProps extends StackProps {
 
 // some code taken from https://github.com/aws-samples/aws-cdk-examples/blob/master/typescript/static-site/static-site.ts
 export class RiskRollerStack extends Construct {
-  private readonly noCachePaths: string[];
   private readonly certificate: acm.Certificate;
   public readonly distribution: cloudfront.Distribution;
 
   constructor(parent: Construct, id: string, props: FrontendConstructProps) {
     super(parent, id);
-
-    this.noCachePaths = [
-      ...(props.noCachePaths ? props.noCachePaths : []),
-      'index.html',
-      'robots.txt',
-      'favicon.ico',
-    ];
 
     // Content bucket
     const siteBucket = new s3.Bucket(this, 'SiteBucket', {
@@ -100,11 +92,6 @@ export class RiskRollerStack extends Construct {
       responseHeadersPolicy
     };
 
-    const noCacheBehavior: cloudfront.BehaviorOptions = {
-      ...defaultBehavior,
-      cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED
-    };
-
     this.distribution = new cloudfront.Distribution(this, 'SiteDistribution', {
       domainNames: props.domainNames ? props.domainNames : undefined,
       certificate: props.domainNames ? this.certificate : undefined,
@@ -123,20 +110,7 @@ export class RiskRollerStack extends Construct {
       enableIpv6: true,
       httpVersion: cloudfront.HttpVersion.HTTP2,
       minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
-      additionalBehaviors: {
-        ...this.noCachePaths.reduce((obj, path) => {
-          obj[path] = noCacheBehavior;
-          return obj;
-        }, {} as Record<string, any>),
-        ...(props.customBehaviors ? props.customBehaviors : {})
-      }
     });
-
-    // used for migration from CloudFrontWebDistribution to Distribution
-    // https://stackoverflow.com/a/68764093/5991792
-    if (props.distributionLocalIdOverride) {
-      (this.distribution.node.defaultChild as cloudfront.CfnDistribution).overrideLogicalId(props.distributionLocalIdOverride);
-    }
 
     new CfnOutput(this, 'DistributionId', { value: this.distribution.distributionId });
     new CfnOutput(this, 'DistributionDomainname', { value: this.distribution.distributionDomainName });
@@ -150,29 +124,11 @@ export class RiskRollerStack extends Construct {
       retainOnDelete: true,
       distribution: this.distribution,
       memoryLimit: 1769, // one full vCPU
-      exclude: this.noCachePaths,
       cacheControl: [
         s3deploy.CacheControl.setPublic(),
         s3deploy.CacheControl.maxAge(Duration.days(365)),
         s3deploy.CacheControl.fromString('immutable')
       ]
     });
-
-    const noCacheDeployment = new s3deploy.BucketDeployment(this, 'S3DeploymentNoCache', {
-      sources: [s3Asset],
-      destinationBucket: siteBucket,
-      retainOnDelete: true,
-      distribution: this.distribution,
-      memoryLimit: 1769, // one full vCPU
-      exclude: ['*'],
-      include: this.noCachePaths,
-      cacheControl: [
-        s3deploy.CacheControl.setPublic(),
-        s3deploy.CacheControl.maxAge(Duration.days(0)),
-        s3deploy.CacheControl.sMaxAge(Duration.days(0))
-      ]
-    });
-
-    noCacheDeployment.node.addDependency(deployment); // ensure deployment goes before noCacheDeployment so that bucket is pruned first
   }
 }
