@@ -1,12 +1,12 @@
 import { App } from 'aws-cdk-lib';
-import { FrontendConstruct } from '../lib/frontend-stack';
+import { RiskRollerStack } from '../lib/frontend-stack';
 
 const app = new App();
-new FrontendConstruct(app, 'Frontend-riskRoller', {
+let riskRollerStack = new RiskRollerStack(app, 'riskRollerStack', {
   env: {
-    account: '577280981174',
+    account: 'AWS_ACCOUNT',
     region: 'us-east-1'
   },
-  domainNames: ['staging-centerstage.sight-sound.com'],
+  domainNames: ['risk-roller.mcgilicuddy.dev'],
   deploymentSource: '../dist/'
 });

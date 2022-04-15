@@ -35,7 +35,7 @@ export interface FrontendConstructProps extends StackProps {
 }
 
 // some code taken from https://github.com/aws-samples/aws-cdk-examples/blob/master/typescript/static-site/static-site.ts
-export class FrontendConstruct extends Construct {
+export class RiskRollerStack extends Construct {
   private readonly noCachePaths: string[];
   private readonly certificate: acm.Certificate;
   public readonly distribution: cloudfront.Distribution;
