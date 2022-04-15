@@ -1,5 +1,5 @@
 import {
-  aws_certificatemanager as acm,
+  App, aws_certificatemanager as acm,
   aws_cloudfront as cloudfront,
   aws_cloudfront_origins as cloudfrontOrigins,
   aws_s3 as s3,
@@ -39,7 +39,7 @@ export class RiskRollerStack extends Construct {
   private readonly certificate: acm.Certificate;
   public readonly distribution: cloudfront.Distribution;
 
-  constructor(parent: Construct, id: string, props: FrontendConstructProps) {
+  constructor(parent: App, id: string, props: FrontendConstructProps) {
     super(parent, id);
 
     // Content bucket
