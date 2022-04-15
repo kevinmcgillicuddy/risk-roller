@@ -24,7 +24,7 @@ jobs:
           cache: 'npm'
     
       - name: Compile client code
-          run: |
+          run:
           npm ci
           npm run build -- --configuration=prod
           rm -f dist/*.map
