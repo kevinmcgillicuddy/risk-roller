@@ -1,0 +1,21 @@
+{
+  "name": "riskroller_fe",
+  "version": "0.1.0",
+  "bin": {
+    "riskroller_fe": "bin/frontend.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.0",
+    "ts-node": "^10.4.0",
+    "typescript": "~3.9.0"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "^2.0.0",
+    "constructs": "^10.0.0"
+  }
+}
