@@ -26,7 +26,7 @@ jobs:
       - name: Compile client code
         run: |
           npm ci
-          npm run build -- --configuration=prod
+          npm run build
           rm -f dist/*.map
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
