@@ -1,6 +1,6 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { StepperOrientation } from '@angular/material/stepper';
 import { map, mergeMap, Observable, of } from 'rxjs';
 import { DiceService, IResult } from './services/dice.service';
@@ -16,7 +16,6 @@ export class AppComponent implements OnInit {
   public defendingCountryGroup: FormGroup;
   public attackingArmies: FormControl;
   public stepperOrientation: Observable<StepperOrientation>;
-  public panelOpenState = false;
   public result$: Observable<IResult>;
   public attackingDice$: Observable<number[]> | undefined;
   constructor(private _formBuilder: FormBuilder, private diceService: DiceService, breakpointObserver: BreakpointObserver) {
@@ -24,19 +23,11 @@ export class AppComponent implements OnInit {
       .observe('(min-width: 800px)')
       .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
   }
-
-  matchPassword(control: AbstractControl): ValidationErrors | null {
-    const attackingArmies = control.get("attackingArmies")?.value;
-    const attackingStop = control.get("attackingStop")?.value;
-    if (attackingStop > attackingArmies) { return { 'noMatch': true } }
-    return null
-  }
   ngOnInit() {
-
     this.attackingCountryGroup = this._formBuilder.group({
-      attackingArmies: ['', [Validators.required, Validators.min(2)]],
+      attackingArmies: ['', [Validators.required, Validators.min(2),]],
       attackingDice: ['', Validators.required],
-      attackingStop: ['', Validators.required],
+      leaveBehind: [1, [Validators.required, Validators.min(1)]],
     });
     this.defendingCountryGroup = this._formBuilder.group({
       defendingArmies: ['', [Validators.required, Validators.min(1)]],
@@ -53,7 +44,7 @@ export class AppComponent implements OnInit {
       attackingArmies: this.attackingCountryGroup.get('attackingArmies')!.value,
       defendingArmies: this.defendingCountryGroup.get('defendingArmies')!.value,
       attackingDice: this.attackingCountryGroup.get('attackingDice')!.value,
-      attackStop: this.attackingCountryGroup.get('attackingStop')!.value
+      attackStop: this.attackingCountryGroup.get('leaveBehind')!.value
     })
   }
 
