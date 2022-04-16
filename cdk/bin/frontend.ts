@@ -2,6 +2,7 @@ import { App } from 'aws-cdk-lib';
 import { RiskRollerStack } from '../lib/frontend-stack';
 
 const app = new App();
+const AWS_ACCOUNT = process.env.AWS_ACCOUNT as string;
 let riskRollerStack = new RiskRollerStack(app, 'frontend-riskRoller', {
   env: {
     account: AWS_ACCOUNT,
