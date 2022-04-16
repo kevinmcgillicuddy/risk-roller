@@ -6,22 +6,30 @@
           <form [formGroup]="attackingCountryGroup">
             <mat-form-field appearance="fill">
               <mat-label>Armies</mat-label>
-              <input type="number" matInput formControlName="attackingArmies" required />
+              <input type="number" matInput formControlName="attackingArmies"
+                placeholder="Number of armies on your country" />
+              <mat-error>
+                Armies is required and must be larger than 1
+              </mat-error>
             </mat-form-field>
+
             <mat-form-field appearance="fill">
               <mat-label>Number of Dice</mat-label>
-              <mat-select formControlName="attackingDice"
-                [disabled]="!attackingCountryGroup.get('attackingArmies')?.valid" mat-raised-button
-                matTooltip="Enter number of armies to determine dice">
+              <mat-select formControlName="attackingDice" mat-raised-button matTooltip="Determined by number armies">
                 <mat-option *ngFor="let dice of attackingDice$ | async" [value]="dice">{{ dice }}</mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field appearance="fill">
               <mat-label>Leave behind</mat-label>
-              <input type="number" matInput formControlName="attackingStop" required />
+              <input type="number" matInput formControlName="leaveBehind"
+                [max]="attackingCountryGroup.get('attackingArmies')?.value - 1"
+                placeholder="Armies to not include in the attack" />
+              <mat-error>
+                Must be less than attacking armies and greater then 0
+              </mat-error>
             </mat-form-field>
             <div>
-              <button mat-raised-button color="primary" matStepperNext [disabled]="!attackingCountryGroup.valid">
+              <button mat-raised-button color="primary" matStepperNext>
                 Next
               </button>
             </div>
@@ -32,10 +40,13 @@
         <form [formGroup]="defendingCountryGroup">
           <mat-form-field appearance="fill">
             <mat-label>Armies</mat-label>
-            <input type="number" matInput formControlName="defendingArmies" required />
+            <input type="number" matInput formControlName="defendingArmies" />
+            <mat-error>
+              Armies is required and must be larger than 1
+            </mat-error>
           </mat-form-field>
           <div>
-            <button mat-raised-button color="primary" matStepperNext [disabled]="!defendingCountryGroup.valid">
+            <button mat-raised-button color="primary" matStepperNext>
               Next
             </button>
           </div>
