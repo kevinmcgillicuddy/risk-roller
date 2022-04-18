@@ -60,8 +60,8 @@ export class DiceService {
         resultString: []
       }]
     }
-
-    while (params.defendingArmies > 0 && params.attackingArmies >= params.attackStop) {
+    console.log(params.attackingArmies)
+    while (params.defendingArmies >= 0 && params.attackingArmies >= params.attackStop) {
       //array of attacking dice
       let attackDice = this.rollDiceResult(this.maxAttackDice(params.attackingArmies, params.attackingDice));
       //array of defending dice

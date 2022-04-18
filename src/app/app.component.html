@@ -61,6 +61,9 @@
         </div>
       </mat-step>
     </mat-stepper>
+    <div>
+    </div>
+
     <div class="accordion" *ngIf="result$ | async as result">
       <mat-accordion>
         <mat-expansion-panel hideToggle>
@@ -73,10 +76,13 @@
             </mat-panel-description>
           </mat-expansion-panel-header>
           <mat-list role="list">
-            <mat-list-item role="listitem" *ngFor="let roll of result.roll | slice:1:result.roll.length">
+            <mat-list-item role="listitem"
+              *ngFor="let roll of result.roll  | slice:1:result.roll.length; let i = index">
               <div>
+                <strong>Roll: {{i + 1}}</strong>
                 <div>Attack rolled: {{roll.attackingDice}}</div>
                 <div>Defense Rolled: {{roll.defendingDice}}</div>
+                <div>⚔️ {{roll.attackingArmiesLeft}} vs 🛡️{{roll.defendingArmiesLeft}}</div>
               </div>
             </mat-list-item>
           </mat-list>

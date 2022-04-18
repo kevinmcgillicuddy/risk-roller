@@ -47,5 +47,4 @@ export class AppComponent implements OnInit {
       attackStop: this.attackingCountryGroup.get('leaveBehind')!.value
     })
   }
-
 }
