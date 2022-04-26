@@ -28,6 +28,9 @@ jobs:
           npm ci
           npm run build
           rm -f dist/*.map
+          cd cdk
+          npm client
+          cd ..
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
