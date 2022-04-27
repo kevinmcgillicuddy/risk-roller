@@ -28,7 +28,7 @@ jobs:
           npm ci
           npm run build
           rm -f dist/*.map
-          cd cdk
+          cd ../cdk
           npm ci
           cd ..
 
