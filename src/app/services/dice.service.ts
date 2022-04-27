@@ -60,8 +60,8 @@ export class DiceService {
         resultString: []
       }]
     }
-    console.log(params.attackingArmies)
-    while (params.defendingArmies >= 0 && params.attackingArmies >= params.attackStop) {
+
+    while (params.defendingArmies > 0 && params.attackingArmies > params.attackStop) {
       //array of attacking dice
       let attackDice = this.rollDiceResult(this.maxAttackDice(params.attackingArmies, params.attackingDice));
       //array of defending dice
@@ -92,6 +92,10 @@ export class DiceService {
     return of({
       roll: result.roll,
       winner: params.defendingArmies > 0 ? '🛡️ Defender' : '⚔️ Attacker',
+      remaining: {
+        attacker: params.attackingArmies,
+        defender: params.defendingArmies
+      }
     } as IResult)
   }
 
@@ -104,6 +108,10 @@ export interface IResult {
     attackingDice: number[];
     defendingDice: number[];
     resultString?: string[];
-  }[]
+  }[],
+  remaining?: {
+    attacker: number,
+    defender: number
+  }
 
 }

@@ -1,8 +1,8 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { StepperOrientation } from '@angular/material/stepper';
-import { map, mergeMap, Observable, of } from 'rxjs';
+import { MatStepper, StepperOrientation } from '@angular/material/stepper';
+import { finalize, map, mergeMap, Observable, of, take } from 'rxjs';
 import { DiceService, IResult } from './services/dice.service';
 
 
@@ -18,6 +18,8 @@ export class AppComponent implements OnInit {
   public stepperOrientation: Observable<StepperOrientation>;
   public result$: Observable<IResult>;
   public attackingDice$: Observable<number[]> | undefined;
+
+  @ViewChild('stepper') stepper: MatStepper;
   constructor(private _formBuilder: FormBuilder, private diceService: DiceService, breakpointObserver: BreakpointObserver) {
     this.stepperOrientation = breakpointObserver
       .observe('(min-width: 800px)')
@@ -45,6 +47,9 @@ export class AppComponent implements OnInit {
       defendingArmies: this.defendingCountryGroup.get('defendingArmies')!.value,
       attackingDice: this.attackingCountryGroup.get('attackingDice')!.value,
       attackStop: this.attackingCountryGroup.get('leaveBehind')!.value
-    })
+    }).pipe(
+      take(1),
+      finalize(() => this.stepper.reset())
+    )
   }
 }
