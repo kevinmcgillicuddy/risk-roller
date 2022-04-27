@@ -42,7 +42,7 @@ jobs:
           retention-days: 1
 
       - name: cdk synth
-        uses: youyo/aws-cdk-github-actions@v2
+        uses: youyo/aws-cdk-github-actions@v2.1.1
         with:
           cdk_subcommand: "synth"
           cdk_version: "1.16.2"
@@ -53,7 +53,7 @@ jobs:
           AWS_DEFAULT_REGION: "us-east-1"
 
       - name: cdk deploy
-        uses: youyo/aws-cdk-github-actions@v2
+        uses: youyo/aws-cdk-github-actions@v2.1.1
         with:
           cdk_subcommand: "deploy"
           cdk_stack: "frontend-riskRoller"
