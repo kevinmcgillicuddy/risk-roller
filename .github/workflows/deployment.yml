@@ -41,6 +41,11 @@ jobs:
             ${{ inputs.ng_directory }}/src/configs
           retention-days: 1
 
+      - name: cdk bootstrap
+        uses: youyo/aws-cdk-github-actions@v2.1.1
+        with:
+          cdk_subcommand: "bootstrap"
+          cdk_stack: "aws:// ${{ secrets.AWS_ACCOUNT }}/us-east-1"
       - name: cdk synth
         uses: youyo/aws-cdk-github-actions@v2.1.1
         with:
