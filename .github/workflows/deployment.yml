@@ -1,10 +1,11 @@
 name: Deployment
 
 on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+  workflow_run:
+    workflows: ["Build and Test"]
+    types:
+      - completed
+
 env:
   AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT }}
 jobs:
