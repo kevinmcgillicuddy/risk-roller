@@ -51,7 +51,9 @@ export class RiskRollerStack extends cdk.Stack {
     if (props.domainNames) {
       // TLS certificate
       this.certificate = new acm.Certificate(this, 'SiteCertificate', {
-        domainName: props.domainNames[0]
+        domainName: props.domainNames[0],
+        validation: acm.CertificateValidation.fromDns(), // Records must be added manually
+
       });
       new CfnOutput(this, 'Certificate', { value: this.certificate.certificateArn });
     }
