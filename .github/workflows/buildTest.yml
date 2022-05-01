@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: Build Angular project
+    name: Build and Test Angular project
     runs-on: ubuntu-latest
 
     steps:
