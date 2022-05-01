@@ -10,7 +10,7 @@ env:
   AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT }}
 jobs:
   build:
-    name: Build Angular project
+    name: Deploy Angular project
     runs-on: ubuntu-latest
 
     steps:
