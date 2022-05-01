@@ -48,42 +48,22 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: "us-east-1"
 
-      - run: yarn install
+      # - run: yarn install
 
-      - name: Synth stack
-        run: yarn --cwd cdk cdk synth
+      # - name: Synth stack
+      #   run: yarn --cwd cdk cdk synth
 
       - name: Deploy stack
         run: yarn --cwd cdk cdk deploy --require-approval never
-      # - name: cdk bootstrap
-      #   uses: youyo/aws-cdk-github-actions@v2.1.1
-      #   with:
-      #     cdk_subcommand: "bootstrap"
-      #     cdk_stack: "aws:// ${{ secrets.AWS_ACCOUNT }}/us-east-1"
-      #   env:
-      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     AWS_DEFAULT_REGION: "us-east-1"
-
-      # - name: cdk synth
-      #   uses: youyo/aws-cdk-github-actions@v2.1.1
-      #   with:
-      #     cdk_subcommand: "synth"
-      #     working_dir: "./cdk"
-      #   env:
-      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     AWS_DEFAULT_REGION: "us-east-1"
-
-      # - name: cdk deploy
-      #   uses: youyo/aws-cdk-github-actions@v2.1.1
-      #   with:
-      #     cdk_subcommand: "deploy"
-      #     cdk_stack: "frontend-riskRoller"
-      #     cdk_args: "--require-approval never"
-      #     working_dir: "./cdk"
-      #     actions_comment: false
-      #   env:
-      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     AWS_DEFAULT_REGION: "us-east-1"
+      - name: cdk deploy
+        uses: youyo/aws-cdk-github-actions@v2.1.1
+        with:
+          cdk_subcommand: "deploy"
+          cdk_stack: "frontend-riskRoller"
+          cdk_args: "--require-approval never"
+          working_dir: "./cdk"
+          actions_comment: false
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: "us-east-1"
