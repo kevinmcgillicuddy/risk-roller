@@ -120,7 +120,7 @@ export class RiskRollerStack extends cdk.Stack {
     const s3Asset = s3deploy.Source.asset(props.deploymentSource);
 
     // https://blog.kewah.com/2021/cdk-pattern-static-files-s3-cloudfront/
-    const deployment = new s3deploy.BucketDeployment(this, 'S3Deployment', {
+    new s3deploy.BucketDeployment(this, 'S3Deployment', {
       sources: [s3Asset],
       destinationBucket: siteBucket,
       retainOnDelete: true,
