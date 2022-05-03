@@ -9,6 +9,6 @@ new RiskRollerStack(app, 'frontend-riskRoller', {
     account: AWS_ACCOUNT,
     region: 'us-east-1'
   },
-  domainNames: ['risk-roller.mcgillicuddy.dev'],
+  domainNames: [DOMAIN_NAME],
   deploymentSource: '../dist/'
 });
