@@ -1,25 +1,20 @@
 name: Deployment
 
 on:
-  workflow_run:
-    workflows: ["Build and Test"]
-    types:
-      - completed
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 env:
   AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT }}
 jobs:
-  deploy:
+  build:
     name: Build Angular project
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - uses: actions/download-artifact@master
-        with:
-          name: my-artifact
-          path: ./dist
 
       - name: Setup Node.js
         uses: actions/setup-node@v2
@@ -30,10 +25,32 @@ jobs:
 
       - name: Compile client code
         run: |
+          npm ci
+          npm run build
+          rm -f ./dist/*.map
           cd ./cdk
           npm ci
           cd ..
 
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: ./dist
+          retention-days: 1
+
+  test:
+    name: Test Angular project
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Run test
+        run: npm run test:ci
+
+  deploy:
+    name: Deploy Angular project
+    runs-on: ubuntu-latest
+    steps:
       - name: cdk deploy
         uses: youyo/aws-cdk-github-actions@v2.1.1
         with:
