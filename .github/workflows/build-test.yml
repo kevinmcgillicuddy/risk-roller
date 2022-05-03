@@ -1,0 +1,43 @@
+name: Build and Test
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    name: Build Angular project
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "16.x"
+          registry-url: "https://npm.pkg.github.com"
+          cache: "npm"
+
+      - name: Compile client code
+        run: |
+          npm ci
+          npm run build
+          rm -f ./dist/*.map
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: ./dist
+          retention-days: 1
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Test code
+        run: |
+          npm test:ci
