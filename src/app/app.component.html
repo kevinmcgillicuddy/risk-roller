@@ -2,7 +2,7 @@
   <mat-card>
     <mat-stepper [orientation]="(stepperOrientation | async)!" [linear]="true" #stepper>
       <div>
-        <mat-step [stepControl]="attackingCountryGroup" label="Attacking Country">
+        <mat-step [stepControl]="attackingCountryGroup" label="Attacking Country" #stepOne>
           <form [formGroup]="attackingCountryGroup">
             <mat-form-field appearance="fill">
               <mat-label>Armies</mat-label>
@@ -26,7 +26,7 @@
               </mat-error>
             </mat-form-field>
             <div>
-              <button mat-raised-button color="primary" matStepperNext>
+              <button mat-raised-button color="primary" matStepperNext [disabled]="attackingCountryGroup.invalid">
                 Next
               </button>
             </div>
@@ -40,7 +40,7 @@
             <input type="number" matInput formControlName="defendingArmies" />
           </mat-form-field>
           <div>
-            <button mat-raised-button color="primary" matStepperNext>
+            <button mat-raised-button color="primary" matStepperNext [disabled]="defendingCountryGroup.invalid">
               Next
             </button>
           </div>
@@ -66,11 +66,11 @@
               Results
             </mat-panel-title>
             <mat-panel-description>
-              <div>{{result.winner}} Won! </div>
+              <div>{{result.winner}} Won! &nbsp;</div>
               <br>
-              <div>Attack Remaing: {{result.remaining?.attacker}}</div>
+              <div>Attack Remaing: {{result.remaining?.attacker}}&nbsp;</div>
               <br>
-              <div>Defense Remaing: {{result.remaining?.defender}}</div>
+              <div>Defense Remaing: {{result.remaining?.defender}}&nbsp;</div>
             </mat-panel-description>
           </mat-expansion-panel-header>
           <mat-list role="list">

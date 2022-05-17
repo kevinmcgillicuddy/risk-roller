@@ -1,4 +1,5 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { CdkStep } from '@angular/cdk/stepper';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatStepper, StepperOrientation } from '@angular/material/stepper';
@@ -20,6 +21,7 @@ export class AppComponent implements OnInit {
   public attackingDice$: Observable<number[]> | undefined;
 
   @ViewChild('stepper') stepper: MatStepper;
+  @ViewChild('stepOne') stepOne: CdkStep;
   constructor(private _formBuilder: FormBuilder, private diceService: DiceService, breakpointObserver: BreakpointObserver) {
     this.stepperOrientation = breakpointObserver
       .observe('(min-width: 800px)')
@@ -49,7 +51,10 @@ export class AppComponent implements OnInit {
       attackStop: this.attackingCountryGroup.get('leaveBehind')!.value
     }).pipe(
       take(1),
-      finalize(() => this.stepper.reset())
+      finalize(() => {
+        this.stepper.selected!.interacted = false;
+        this.stepper.selected = this.stepOne;
+      })
     )
   }
 }
