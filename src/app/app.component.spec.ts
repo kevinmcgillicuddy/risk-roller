@@ -1,19 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { UntypedFormBuilder } from '@angular/forms';
-import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
-import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { MatLegacyFormFieldModule as MatFormFieldModule } from '@angular/material/legacy-form-field';
-import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
-import { MatLegacyListModule as MatListModule } from '@angular/material/legacy-list';
-import { MatLegacySelectModule as MatSelectModule } from '@angular/material/legacy-select';
-import { MatLegacySliderModule as MatSliderModule } from '@angular/material/legacy-slider';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSliderModule } from '@angular/material/slider';
 import { MatStepperModule } from '@angular/material/stepper';
-import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/legacy-tooltip';
-import { AppComponent } from './app.component';
-import { DiceService } from './services/dice.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { of } from 'rxjs';
-import { spyOn } from 'jasmine';
+import { AppComponent } from './app.component';
+import { DiceService, IResult } from './services/dice.service';
 
 describe('AppComponent', () => {
   let component: AppComponent;
@@ -43,8 +42,8 @@ describe('AppComponent', () => {
 
   it('should create the app', () => {
     const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+    component = fixture.componentInstance;
+    expect(component).toBeTruthy();
   });
 
   it('should initialize the form groups and controls', () => {
@@ -76,7 +75,7 @@ describe('AppComponent', () => {
         attacker: 5,
         defender: 3,
       },
-    };
+    } as IResult;
     spyOn(diceService, 'attack').and.returnValue(of(mockResult));
 
     component.attackingCountryGroup.get('attackingArmies')?.setValue(5);
