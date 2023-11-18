@@ -1,7 +1,7 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CdkStep } from '@angular/cdk/stepper';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatStepper, StepperOrientation } from '@angular/material/stepper';
 import { finalize, map, mergeMap, Observable, of, take } from 'rxjs';
 import { DiceService, IResult } from './services/dice.service';
@@ -13,16 +13,16 @@ import { DiceService, IResult } from './services/dice.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  public attackingCountryGroup: FormGroup;
-  public defendingCountryGroup: FormGroup;
-  public attackingArmies: FormControl;
+  public attackingCountryGroup: UntypedFormGroup;
+  public defendingCountryGroup: UntypedFormGroup;
+  public attackingArmies: UntypedFormControl;
   public stepperOrientation: Observable<StepperOrientation>;
   public result$: Observable<IResult>;
   public attackingDice$: Observable<number[]> | undefined;
 
   @ViewChild('stepper') stepper: MatStepper;
   @ViewChild('stepOne') stepOne: CdkStep;
-  constructor(private _formBuilder: FormBuilder, private diceService: DiceService, breakpointObserver: BreakpointObserver) {
+  constructor(private _formBuilder: UntypedFormBuilder, private diceService: DiceService, breakpointObserver: BreakpointObserver) {
     this.stepperOrientation = breakpointObserver
       .observe('(min-width: 800px)')
       .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));

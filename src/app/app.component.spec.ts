@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -37,7 +37,7 @@ describe('AppComponent', () => {
         MatButtonModule,
         MatFormFieldModule,
       ],
-      providers: [FormBuilder, DiceService]
+      providers: [UntypedFormBuilder, DiceService]
     }).compileComponents();
   });
 
