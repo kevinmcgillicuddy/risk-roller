@@ -12,7 +12,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { of, take } from 'rxjs';
+import { of, shareReplay, take } from 'rxjs';
 import { AppComponent } from './app.component';
 import { DiceService, IResult } from './services/dice.service';
 
@@ -65,32 +65,34 @@ describe('AppComponent', () => {
     expect(component.attackingCountryGroup.get('leaveBehind')?.value).toBe(1);
   });
 
-  it('should calculate attacking dice based on attackingArmies of 1', () => {
+  it('should calculate attacking dice based on attackingArmies of 1', async () => {
+    let val: number[] = [];
+    component.attackingDice$?.pipe(shareReplay(5)).subscribe((diceOptions) => {
+      val = diceOptions
+    });
     component.attackingCountryGroup.get('attackingArmies')?.setValue(2);
     fixture.detectChanges();
-    component.attackingDice$?.pipe(take(1)).subscribe((diceOptions) => {
-      expect(diceOptions).toEqual([1]);
-      component.attackingCountryGroup.get('attackingArmies')?.reset();
-    });
+    expect(val).toEqual([1]);
   });
 
   it('should calculate attacking dice based on attackingArmies of 3', () => {
+    let val: number[] = [];
+    component.attackingDice$?.pipe(shareReplay(5)).subscribe((diceOptions) => {
+      val = diceOptions
+    });
     component.attackingCountryGroup.get('attackingArmies')?.setValue(3);
     fixture.detectChanges();
-    component.attackingDice$?.pipe(take(1)).subscribe((diceOptions) => {
-      console.log(diceOptions);
-      expect(diceOptions).toEqual([1, 2]);
-      component.attackingCountryGroup.get('attackingArmies')?.reset();
-    });
+    expect(val).toEqual([1, 2]);
   });
 
   it('should calculate attacking dice based on attackingArmies of 4', () => {
+    let val: number[] = [];
+    component.attackingDice$?.pipe(shareReplay(5)).subscribe((diceOptions) => {
+      val = diceOptions
+    });
     component.attackingCountryGroup.get('attackingArmies')?.setValue(4);
     fixture.detectChanges();
-    component.attackingDice$?.pipe(take(1)).subscribe((diceOptions) => {
-      expect(diceOptions).toEqual([1, 2, 3]);
-      component.attackingCountryGroup.get('attackingArmies')?.reset();
-    });
+    expect(val).toEqual([1, 2, 3]);
   });
 
 

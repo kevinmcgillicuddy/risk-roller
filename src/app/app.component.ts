@@ -36,23 +36,11 @@ export class AppComponent implements OnInit {
     this.defendingCountryGroup = this._formBuilder.group({
       defendingArmies: new FormControl<number>(1, { nonNullable: true, validators: [Validators.required, Validators.min(1)] }),
     });
-
-    let attackingDiceOptions: number[];
-    const attackingArmiesControl = this.attackingCountryGroup.get('attackingArmies') as FormControl<number>;
-    if (attackingArmiesControl) {
-      const number = attackingArmiesControl.value;
-      if (number <= 2) {
-        attackingDiceOptions = [1];
-      } else if (number <= 3) {
-        attackingDiceOptions = [1, 2];
-      } else {
-        attackingDiceOptions = [1, 2, 3];
-      }
-    }
-
-    this.attackingDice$ = attackingArmiesControl?.valueChanges.pipe(
-      mergeMap(() => of(attackingDiceOptions))
-    );
+    this.attackingDice$ = this.attackingCountryGroup.get('attackingArmies')?.valueChanges.pipe(
+      mergeMap(number => number <= 2 ? of([1])
+        : number <= 3 ? of([1, 2])
+          : of([1, 2, 3]))
+    )
   }
   submit() {
     this.result$ = this.diceService.attack({
