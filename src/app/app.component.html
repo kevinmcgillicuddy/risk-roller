@@ -6,13 +6,14 @@
           <form [formGroup]="attackingCountryGroup">
             <mat-form-field appearance="fill">
               <mat-label>Armies</mat-label>
-              <input type="number" matInput formControlName="attackingArmies"
+              <input data-test="attacking-armies" type="number" matInput formControlName="attackingArmies"
                 placeholder="Number of armies on your country" />
             </mat-form-field>
 
             <mat-form-field appearance="fill">
               <mat-label>Number of Dice</mat-label>
-              <mat-select formControlName="attackingDice" mat-raised-button matTooltip="Determined by number armies">
+              <mat-select data-test="attacking-armies-dice" formControlName="attackingDice" mat-raised-button
+                matTooltip="Determined by number armies">
                 <mat-option *ngFor="let dice of attackingDice$ | async" [value]="dice">{{ dice }}</mat-option>
               </mat-select>
             </mat-form-field>
@@ -26,7 +27,8 @@
               </mat-error>
             </mat-form-field>
             <div>
-              <button mat-raised-button color="primary" matStepperNext [disabled]="attackingCountryGroup.invalid">
+              <button data-test="attacking-next" mat-raised-button color="primary" matStepperNext
+                [disabled]="attackingCountryGroup.invalid">
                 Next
               </button>
             </div>
@@ -37,10 +39,11 @@
         <form [formGroup]="defendingCountryGroup">
           <mat-form-field appearance="fill">
             <mat-label>Armies</mat-label>
-            <input type="number" matInput formControlName="defendingArmies" />
+            <input data-test="defending-armies" type="number" matInput formControlName="defendingArmies" />
           </mat-form-field>
           <div>
-            <button mat-raised-button color="primary" matStepperNext [disabled]="defendingCountryGroup.invalid">
+            <button data-test="defending-armies-next" mat-raised-button color="primary" matStepperNext
+              [disabled]="defendingCountryGroup.invalid">
               Next
             </button>
           </div>
@@ -50,7 +53,7 @@
         <ng-template matStepLabel>Done</ng-template>
         <p>The name of the game is Risk.</p>
         <div>
-          <button mat-raised-button color="warn" (click)="submit()">Attack!</button>
+          <button mat-raised-button color="warn" data-test="attack-button" (click)="submit()">Attack!</button>
           <button mat-raised-button (click)="stepper.reset()" matStepperPrevious>Reset</button>
         </div>
       </mat-step>
