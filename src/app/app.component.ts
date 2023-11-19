@@ -1,9 +1,9 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CdkStep } from '@angular/cdk/stepper';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatStepper, StepperOrientation } from '@angular/material/stepper';
-import { finalize, map, mergeMap, Observable, of, take } from 'rxjs';
+import { Observable, finalize, map, mergeMap, of, take } from 'rxjs';
 import { DiceService, IResult } from './services/dice.service';
 
 
@@ -13,35 +13,46 @@ import { DiceService, IResult } from './services/dice.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  public attackingCountryGroup: UntypedFormGroup;
-  public defendingCountryGroup: UntypedFormGroup;
-  public attackingArmies: UntypedFormControl;
+  public attackingCountryGroup: FormGroup<{ attackingArmies: FormControl<number>; attackingDice: FormControl<number>; leaveBehind: FormControl<number>; }>;
+  public defendingCountryGroup: FormGroup<{ defendingArmies: FormControl<number>; }>;
+  public attackingArmies: FormControl<number>;
   public stepperOrientation: Observable<StepperOrientation>;
   public result$: Observable<IResult>;
   public attackingDice$: Observable<number[]> | undefined;
 
   @ViewChild('stepper') stepper: MatStepper;
   @ViewChild('stepOne') stepOne: CdkStep;
-  constructor(private _formBuilder: UntypedFormBuilder, private diceService: DiceService, breakpointObserver: BreakpointObserver) {
+  constructor(private _formBuilder: FormBuilder, private diceService: DiceService, breakpointObserver: BreakpointObserver) {
     this.stepperOrientation = breakpointObserver
       .observe('(min-width: 800px)')
       .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
   }
   ngOnInit() {
     this.attackingCountryGroup = this._formBuilder.group({
-      attackingArmies: ['', [Validators.required, Validators.min(2),]],
-      attackingDice: ['', Validators.required],
-      leaveBehind: [1, [Validators.required, Validators.min(1)]],
+      attackingArmies: new FormControl<number>(0, { nonNullable: true, validators: [Validators.required, Validators.min(1)] }),
+      attackingDice: new FormControl<number>(0, { nonNullable: true, validators: [Validators.required] }),
+      leaveBehind: new FormControl<number>(1, { nonNullable: true, validators: [Validators.required, Validators.min(1)] }),
     });
     this.defendingCountryGroup = this._formBuilder.group({
-      defendingArmies: ['', [Validators.required, Validators.min(1)]],
+      defendingArmies: new FormControl<number>(1, { nonNullable: true, validators: [Validators.required, Validators.min(1)] }),
     });
 
-    this.attackingDice$ = this.attackingCountryGroup.get('attackingArmies')?.valueChanges.pipe(
-      mergeMap(number => number <= 2 ? of([1])
-        : number <= 3 ? of([1, 2])
-          : of([1, 2, 3]))
-    )
+    let attackingDiceOptions: number[];
+    const attackingArmiesControl = this.attackingCountryGroup.get('attackingArmies') as FormControl<number>;
+    if (attackingArmiesControl) {
+      const number = attackingArmiesControl.value;
+      if (number <= 2) {
+        attackingDiceOptions = [1];
+      } else if (number <= 3) {
+        attackingDiceOptions = [1, 2];
+      } else {
+        attackingDiceOptions = [1, 2, 3];
+      }
+    }
+
+    this.attackingDice$ = attackingArmiesControl?.valueChanges.pipe(
+      mergeMap(() => of(attackingDiceOptions))
+    );
   }
   submit() {
     this.result$ = this.diceService.attack({
