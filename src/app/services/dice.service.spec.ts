@@ -41,6 +41,33 @@ describe('DiceService', () => {
     });
   });
 
+  describe('rollDiceResult()', () => {
+    it('should return an array of numbers', () => {
+      const times = 3;
+      const result = service.rollDiceResult(times);
+      expect(Array.isArray(result)).toBe(true);
+      expect(result.every((num) => typeof num === 'number')).toBe(true);
+    });
+
+    it('should return an array with the specified length', () => {
+      const times = 5;
+      const result = service.rollDiceResult(times);
+      expect(result.length).toBe(times);
+    });
+
+    it('should return an array with numbers between 1 and 6', () => {
+      const times = 10;
+      const result = service.rollDiceResult(times);
+      expect(result.every((num) => num >= 1 && num <= 6)).toBe(true);
+    });
+
+    it('should return an array sorted in descending order', () => {
+      const times = 4;
+      const result = service.rollDiceResult(times);
+      expect(result).toEqual(result.sort((a, b) => b - a));
+    });
+  });
+
   describe('attack() ', () => {
     it('should have attack return an observable', () => {
       let result: IResult;
