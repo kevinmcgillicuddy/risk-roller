@@ -33,7 +33,7 @@ module.exports = function (config) {
         { type: "lcovonly" },
       ],
     },
-    reporters: ["progress", "kjhtml"],
+    reporters: ["progress", "kjhtml", "coverage"],
     browsers: ["Chrome", "ChromeHeadless", "ChromeHeadlessCI"],
     customLaunchers: {
       ChromeHeadlessCI: {
