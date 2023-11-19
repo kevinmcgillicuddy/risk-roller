@@ -1,13 +1,14 @@
 import * as cdk from 'aws-cdk-lib';
 import {
+  CfnOutput,
+  Duration,
+  RemovalPolicy,
+  StackProps,
   aws_certificatemanager as acm,
   aws_cloudfront as cloudfront,
   aws_cloudfront_origins as cloudfrontOrigins,
   aws_s3 as s3,
-  aws_s3_deployment as s3deploy, CfnOutput,
-  Duration,
-  RemovalPolicy,
-  StackProps
+  aws_s3_deployment as s3deploy
 } from 'aws-cdk-lib';
 
 export interface FrontendConstructProps extends StackProps {
@@ -45,7 +46,8 @@ export class RiskRollerStack extends cdk.Stack {
     // Content bucket
     const siteBucket = new s3.Bucket(this, 'SiteBucket', {
       removalPolicy: RemovalPolicy.DESTROY,
-      encryption: s3.BucketEncryption.S3_MANAGED
+      encryption: s3.BucketEncryption.S3_MANAGED,
+      enforceSSL: true,
     });
 
     if (props.domainNames) {

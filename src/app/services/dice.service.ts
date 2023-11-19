@@ -6,8 +6,6 @@ import { Observable, of } from 'rxjs';
 })
 export class DiceService {
 
-  constructor() { }
-
   /**
    * @param times the number of dice to roll to return as part of the array aka the users roll of dice
    * @returns an array of numbers between 1 and 6, sorted high to low
