@@ -17,6 +17,7 @@ https://risk-roller.mcgillicuddy.dev
 [<img src="./tech_used/reactivex.svg" width="70" />](./tech_used/reactivex.svg)
 [<img src="./tech_used/typescript-icon.svg" width="70" />](./tech_used/typescript-icon.svg)
 [<img src="./tech_used/karma.svg" width="70" />](./tech_used/karma.svg)
+[<img src="./tech_used/playwright.svg" width="70" />](./tech_used/playwright.svg)
 
 ## Development server
 
@@ -31,6 +32,10 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 ## Running unit tests
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+
+## Running E2E tests
+
+Run `npm run e2e` to execute the e2e tests via [Playwright](https://playwright.dev/).
 
 ## Deployment
 
