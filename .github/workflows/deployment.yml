@@ -48,7 +48,7 @@ jobs:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
       - name: cdk deploy
-        uses: youyo/aws-cdk-github-actions@v2.1.1
+        uses: youyo/aws-cdk-github-actions@v2.1.4
         with:
           cdk_subcommand: "deploy"
           cdk_stack: "frontend-riskRoller"
