@@ -26,7 +26,8 @@
               </mat-error>
             </mat-form-field>
             <div>
-              <button mat-raised-button color="primary" matStepperNext [disabled]="attackingCountryGroup.invalid">
+              <button mat-raised-button type="button" color="primary" matStepperNext
+                [disabled]="attackingCountryGroup.invalid">
                 Next
               </button>
             </div>
@@ -37,10 +38,11 @@
         <form [formGroup]="defendingCountryGroup">
           <mat-form-field appearance="fill">
             <mat-label>Armies</mat-label>
-            <input type="number" matInput formControlName="defendingArmies" />
+            <input aria-label="defendingArmies" type="number" matInput formControlName="defendingArmies" />
           </mat-form-field>
           <div>
-            <button mat-raised-button color="primary" matStepperNext [disabled]="defendingCountryGroup.invalid">
+            <button type="button" mat-raised-button color="primary" matStepperNext
+              [disabled]="defendingCountryGroup.invalid">
               Next
             </button>
           </div>

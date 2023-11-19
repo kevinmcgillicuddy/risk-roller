@@ -1,5 +1,6 @@
-import { TestBed } from '@angular/core/testing';
-import { FormBuilder } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -10,9 +11,16 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { of, take } from 'rxjs';
 import { AppComponent } from './app.component';
+import { DiceService, IResult } from './services/dice.service';
 
 describe('AppComponent', () => {
+  let component: AppComponent;
+  let fixture: ComponentFixture<AppComponent>;
+  let diceService: DiceService;
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [
@@ -25,19 +33,98 @@ describe('AppComponent', () => {
         MatCardModule,
         MatSliderModule,
         MatInputModule,
+        BrowserAnimationsModule,
+        ReactiveFormsModule,
+        CommonModule,
         MatSelectModule,
         MatTooltipModule,
         MatButtonModule,
         MatFormFieldModule,
       ],
-      providers: [FormBuilder]
+      providers: [FormBuilder, DiceService]
     }).compileComponents();
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
+    diceService = TestBed.inject(DiceService); // Add this line
+    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+    expect(component).toBeTruthy();
+  });
+
+  it('should initialize the form groups and controls', async () => {
+    fixture.detectChanges();
+    expect(component.attackingCountryGroup.value).toEqual({ attackingArmies: 0, attackingDice: 0, leaveBehind: 1 });
+    expect(component.defendingCountryGroup.value).toEqual({ defendingArmies: 1 });
+  });
+
+  it('should set the initial values for form controls', () => {
+    fixture.detectChanges();
+    expect(component.attackingCountryGroup.get('leaveBehind')?.value).toBe(1);
+  });
+
+  it('should calculate attacking dice based on attackingArmies of 1', () => {
+    component.attackingCountryGroup.get('attackingArmies')?.setValue(2);
+    fixture.detectChanges();
+    component.attackingDice$?.pipe(take(1)).subscribe((diceOptions) => {
+      expect(diceOptions).toEqual([1]);
+      component.attackingCountryGroup.get('attackingArmies')?.reset();
+    });
+  });
+
+  it('should calculate attacking dice based on attackingArmies of 3', () => {
+    component.attackingCountryGroup.get('attackingArmies')?.setValue(3);
+    fixture.detectChanges();
+    component.attackingDice$?.pipe(take(1)).subscribe((diceOptions) => {
+      console.log(diceOptions);
+      expect(diceOptions).toEqual([1, 2]);
+      component.attackingCountryGroup.get('attackingArmies')?.reset();
+    });
+  });
+
+  it('should calculate attacking dice based on attackingArmies of 4', () => {
+    component.attackingCountryGroup.get('attackingArmies')?.setValue(4);
+    fixture.detectChanges();
+    component.attackingDice$?.pipe(take(1)).subscribe((diceOptions) => {
+      expect(diceOptions).toEqual([1, 2, 3]);
+      component.attackingCountryGroup.get('attackingArmies')?.reset();
+    });
+  });
+
+
+  it('should call diceService.attack on submit', () => {
+    const mockResult = {
+      winner: '⚔️ Attacker',
+      roll: [],
+      remaining: {
+        attacker: 5,
+        defender: 3,
+      },
+    } as IResult;
+    spyOn(diceService, 'attack').and.returnValue(of(mockResult));
+
+    component.attackingCountryGroup.get('attackingArmies')?.setValue(5);
+    component.defendingCountryGroup.get('defendingArmies')?.setValue(3);
+    component.attackingCountryGroup.get('attackingDice')?.setValue(3);
+    component.attackingCountryGroup.get('leaveBehind')?.setValue(1);
+
+    component.submit();
+
+    expect(diceService.attack).toHaveBeenCalledWith({
+      attackingArmies: 5,
+      defendingArmies: 3,
+      attackingDice: 3,
+      attackStop: 1,
+    });
+
+    component.result$?.pipe(take(1)).subscribe((result) => {
+      expect(result).toEqual(mockResult);
+    });
   });
 
 });
+
+
+

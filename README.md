@@ -1,6 +1,17 @@
 # RiskRoller
 
+This project is used for the time late in a Risk board game when you have 2 large armies going at it and your friends are sitting around watching other people roll dice. This will allow you to quick simulate any battle in Risk the board Game
+
+Live Preview here:
 https://risk-roller.mcgillicuddy.dev
+
+## Technology Used
+
+![Angular](./tech_used/angular-icon.svg)
+![RxJS](./tech_used/reactivex.svg)
+![AWS CDK](./tech_used/aws-cloudformation.svg)
+![TypeScript](./tech_used/typescript-icon.svg)
+![Karama](./tech_used/karma.svg)
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.3.1.
 
