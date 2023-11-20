@@ -56,7 +56,7 @@ describe('AppComponent', () => {
 
   it('should initialize the form groups and controls', async () => {
     fixture.detectChanges();
-    expect(component.attackingCountryGroup.value).toEqual({ attackingArmies: 0, attackingDice: 0, leaveBehind: 1 });
+    expect(component.attackingCountryGroup.value).toEqual({ attackingArmies: 0, attackingDice: 1, leaveBehind: 1 });
     expect(component.defendingCountryGroup.value).toEqual({ defendingArmies: 1 });
   });
 
