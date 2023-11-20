@@ -30,7 +30,7 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.attackingCountryGroup = this._formBuilder.group({
       attackingArmies: new FormControl<number>(0, { nonNullable: true, validators: [Validators.required, Validators.min(1)] }),
-      attackingDice: new FormControl<number>(0, { nonNullable: true, validators: [Validators.required] }),
+      attackingDice: new FormControl<number>(1, { nonNullable: true, validators: [Validators.required, Validators.min(1)] }),
       leaveBehind: new FormControl<number>(1, { nonNullable: true, validators: [Validators.required, Validators.min(1)] }),
     });
     this.defendingCountryGroup = this._formBuilder.group({

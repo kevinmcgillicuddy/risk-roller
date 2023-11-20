@@ -73,5 +73,6 @@ export default defineConfig({
     command: 'npm run build && npm run start',
     url: 'http://127.0.0.1:4200',
     reuseExistingServer: true,
+    timeout: 120000
   },
 });
