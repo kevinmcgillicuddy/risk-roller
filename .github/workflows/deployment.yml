@@ -70,6 +70,6 @@ jobs:
       - name: Install playwright browsers
         run: npx playwright install --with-deps
       - name: Run server
-        run: npm start
+        run: npm run start
       - name: Run tests
         run: npx playwright test
