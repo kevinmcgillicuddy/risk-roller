@@ -70,7 +70,7 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: ' npm start',
+    command: ' npm run start',
     url: 'http://127.0.0.1:4200',
     reuseExistingServer: true,
     timeout: 60000,
